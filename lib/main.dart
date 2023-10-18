@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Your Todo App',
-      initialRoute: '/signup', // You can set the initial route here
+      initialRoute: '/login', // You can set the initial route here
       routes: {
         '/login': (context) => LoginScreen(),
         '/signup': (context) => SignUpScreen(),
