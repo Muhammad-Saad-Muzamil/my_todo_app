@@ -11,9 +11,9 @@ class MainAppScreen extends StatefulWidget {
 
 class _MainAppScreenState extends State<MainAppScreen> {
   final Map<String, String> _iconMap = {
-    'home': 'assets/polarbear.jpg',
-    'work': 'assets/elephant.png',
-    'school': 'assets/parrot.png',
+    'home': 'assets/home.png',
+    'work': 'assets/work.png',
+    'other': 'assets/other.png',
     // Add more image paths as needed
   };
 
@@ -47,7 +47,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
   void _addTodoItem(String task) {
     if (task.isNotEmpty) {
       setState(() {
-        String imagePath = 'assets/parrot.png'; // Default image if no match is found
+        String imagePath = 'assets/other.png'; // Default image if no match is found
         for (String key in _iconMap.keys) {
           if (task.toLowerCase().contains(key)) {
             imagePath = _iconMap[key]!;
@@ -97,7 +97,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
       itemBuilder: (context, index) {
         return ListTile(
           leading: CircleAvatar(
-            backgroundColor: Color.fromARGB(255, 163, 64, 255),
+            backgroundColor: Color.fromARGB(255, 249, 247, 250),
             child: Image.asset(
               _todoItems[index][1],
               width: 24, // Adjust the width as needed

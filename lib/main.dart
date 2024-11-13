@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      
       title: 'Your Todo App',
       initialRoute: '/mainApp', // You can set the initial route here
       routes: {
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
         '/mainApp': (context) => MainAppScreen(),
       },
       home: HomePage(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }
