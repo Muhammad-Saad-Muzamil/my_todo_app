@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert'; // For converting data to/from JSON
 
 class MainAppScreen extends StatefulWidget {
+  const MainAppScreen({super.key});
+
   @override
   _MainAppScreenState createState() => _MainAppScreenState();
 }
@@ -15,11 +19,35 @@ class _MainAppScreenState extends State<MainAppScreen> {
 
   List<List<dynamic>> _todoItems = [];
 
+  @override
+  void initState() {
+    super.initState();
+    _loadTodoItems();
+  }
+
+  // Load the to-do items from shared preferences
+  Future<void> _loadTodoItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedTodos = prefs.getString('todo_items');
+    if (savedTodos != null) {
+      setState(() {
+        _todoItems = List<List<dynamic>>.from(
+          jsonDecode(savedTodos).map((item) => List<dynamic>.from(item))
+        );
+      });
+    }
+  }
+
+  // Save the to-do items to shared preferences
+  Future<void> _saveTodoItems() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('todo_items', jsonEncode(_todoItems));
+  }
+
   void _addTodoItem(String task) {
     if (task.isNotEmpty) {
       setState(() {
-        String imagePath =
-            'assets/parrot.png'; // Default image if no match is found
+        String imagePath = 'assets/parrot.png'; // Default image if no match is found
         for (String key in _iconMap.keys) {
           if (task.toLowerCase().contains(key)) {
             imagePath = _iconMap[key]!;
@@ -28,6 +56,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
         }
         _todoItems.add([task, imagePath]);
       });
+      _saveTodoItems(); // Save changes
     }
   }
 
@@ -35,6 +64,7 @@ class _MainAppScreenState extends State<MainAppScreen> {
     setState(() {
       _todoItems.removeAt(index);
     });
+    _saveTodoItems(); // Save changes
   }
 
   void _promptRemoveTodoItem(int index) {
@@ -67,12 +97,12 @@ class _MainAppScreenState extends State<MainAppScreen> {
       itemBuilder: (context, index) {
         return ListTile(
           leading: CircleAvatar(
+            backgroundColor: Color.fromARGB(255, 163, 64, 255),
             child: Image.asset(
               _todoItems[index][1],
               width: 24, // Adjust the width as needed
               height: 24, // Adjust the height as needed
             ),
-            backgroundColor: Color.fromARGB(255, 163, 64, 255),
           ),
           title: Text(_todoItems[index][0]),
           onTap: () => _promptRemoveTodoItem(index),
